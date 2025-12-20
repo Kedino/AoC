@@ -1,30 +1,40 @@
+# AoC/3/output.py
+
 class Output:
     def __init__(self, first, second):
-        self.first_digit = int(first)
-        self.second_digit = int(second)
-        self.highest_skipped = 0
+        self.tens_digit = int(first)
+        self.ones_digit = int(second)
+        self.highest_ones = int(second)
 
     def compare(self, new_digit):
         new_digit = int(new_digit)
-        replaced = None
-        if new_digit >= self.first_digit:
-            replaced = self.first_digit
-            self.first_digit = new_digit
-        elif new_digit >= self.highest_skipped:
-            self.highest_skipped = new_digit
-        if replaced:
-            if replaced >= self.second_digit:
-                self.second_digit = replaced
-        if self.highest_skipped:
-            if self.highest_skipped >= self.second_digit:
-                self.second_digit = self.highest_skipped
-                self.highest_skipped = 0
-        
-        
-    def total_value(self):
-        return (self.first_digit * 10) + self.second_digit
-        
-        
+        if not self.eval_tens(new_digit):
+            self.eval_highest_ones(new_digit)
+        else:
+            self.eval_ones(self.highest_ones)
 
+            
+        
+    def eval_tens(self, new_digit):
+        if new_digit >= self.tens_digit:
+            self.eval_highest_ones(self.tens_digit)
+            self.tens_digit = new_digit
+            return True
+        return False
+    
+    def eval_ones(self, new_digit):
+        if new_digit >= self.ones_digit:
+            self.ones_digit = new_digit
+            return True
+        return False
+    
+    def eval_highest_ones(self, new_digit):
+        if new_digit >= self.highest_ones:
+            self.highest_ones = new_digit
+            return True
+        return False
+
+    def total_value(self):
+        return (int(self.tens_digit) * 10) + int(self.ones_digit)
 
     
